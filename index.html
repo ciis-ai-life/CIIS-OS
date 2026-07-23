@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Xavier Gaffer">
+    <title>CIIS OS - Terminal Institucional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/desktop.css">
+    <link rel="stylesheet" href="css/windows.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <main id="ciis-desktop">
+        <div id="window-manager"></div>
+        <div id="hud-overlay">
+            <div class="hud-widget time-widget">
+                <span id="current-time">00:00:00</span>
+                <span id="current-location">Morelia, Mich.</span>
+            </div>
+            <div class="hud-widget hardware-widget">
+                <div class="hw-item">SYS: <span id="sys-status">ONLINE</span></div>
+                <div class="hw-item">MEM: <span id="hw-ram">18%</span></div>
+                <div class="hw-item">NET: <span id="hw-net">SECURE</span></div>
+            </div>
+        </div>
+    </main>
+
+    <nav id="ciis-taskbar">
+        <button id="start-button" class="taskbar-btn" title="Menú Principal">
+            <svg viewBox="0 0 24 24" fill="#00e5ff" width="22" height="22"><path d="M12 2L2 2v20L12 22z"/></svg>
+        </button>
+        <div id="running-apps"></div>
+        <div id="system-tray">
+            <span class="tray-icon">🌐</span>
+            <span class="tray-icon">🔔</span>
+            <span id="tray-clock">00:00</span>
+        </div>
+    </nav>
+
+    <div id="start-menu" class="hidden">
+        <div class="user-profile">
+            <div class="avatar">XG</div>
+            <div class="user-info">
+                <span class="user-name">Xavier Gaffer</span>
+                <span class="user-role">Investigador Jefe</span>
+            </div>
+        </div>
+        <div class="app-grid" id="start-menu-grid">
+            <!-- Inyectado por el Kernel -->
+        </div>
+    </div>
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>

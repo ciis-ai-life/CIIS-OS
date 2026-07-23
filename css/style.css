@@ -1,0 +1,26 @@
+:root {
+    --color-bg-dark: #050a0f;
+    --color-cyan: #00e5ff;
+    --color-turquoise: #1de9b6;
+    --color-white: #e0f7fa;
+    --color-glass: rgba(5, 10, 15, 0.65);
+    --color-glass-border: rgba(0, 229, 255, 0.15);
+    --color-glass-hover: rgba(0, 229, 255, 0.1);
+    --glow-cyan: 0 0 10px rgba(0, 229, 255, 0.4);
+    --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    --font-main: 'Inter', system-ui, sans-serif;
+    --font-mono: 'Consolas', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+body {
+    background-color: var(--color-bg-dark);
+    color: var(--color-white);
+    font-family: var(--font-main);
+    height: 100vh; width: 100vw; overflow: hidden;
+    display: flex; flex-direction: column;
+    background-image: radial-gradient(circle at 50% 50%, rgba(0,229,255,0.05) 0%, transparent 60%);
+}
+.hidden { display: none !important; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+::-webkit-scrollbar-thumb { background: rgba(0,229,255,0.3); border-radius: 3px; }

@@ -1,0 +1,13 @@
+.ciis-window { position: absolute; background: var(--color-glass); backdrop-filter: blur(15px); border: 1px solid var(--color-glass-border); border-radius: 10px; box-shadow: var(--shadow-glass); display: flex; flex-direction: column; overflow: hidden; min-width: 300px; min-height: 200px; transition: opacity 0.2s, transform 0.2s; }
+.window-header { height: 38px; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--color-glass-border); display: flex; justify-content: space-between; align-items: center; padding: 0 12px; cursor: grab; }
+.window-header:active { cursor: grabbing; }
+.window-title { font-size: 0.9rem; font-weight: bold; color: var(--color-cyan); }
+.window-controls { display: flex; gap: 6px; }
+.win-btn { width: 12px; height: 12px; border-radius: 50%; border: none; cursor: pointer; }
+.btn-close { background: #ff5f56; }
+.btn-minimize { background: #ffbd2e; }
+.btn-maximize { background: #27c93f; }
+.window-content { flex: 1; padding: 15px; overflow-y: auto; color: var(--color-white); background: rgba(0,0,0,0.3); }
+.ciis-window.minimized { opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95); }
+.taskbar-app { background: rgba(255,255,255,0.05); border: 1px solid rgba(0,229,255,0.1); color: var(--color-white); padding: 0 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; font-size: 0.85rem; }
+.taskbar-app.active { background: rgba(0,229,255,0.2); border-bottom: 2px solid var(--color-cyan); }

@@ -1,55 +1,86 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Xavier Gaffer">
-    <title>CIIS OS - Terminal Institucional</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/desktop.css">
-    <link rel="stylesheet" href="css/windows.css">
-    <link rel="stylesheet" href="css/animations.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Xavier Gaffer">
+  <meta name="description" content="Centro de Investigación de Identidad Soberana - Sistema Operativo Web">
+  <title>CIIS OS - Centro de Investigación de Identidad Soberana</title>
+
+  <!-- Hojas de Estilo Oficiales -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/desktop.css">
+  <link rel="stylesheet" href="css/windows.css">
+  <link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
-    <main id="ciis-desktop">
-        <div id="window-manager"></div>
-        <div id="hud-overlay">
-            <div class="hud-widget time-widget">
-                <span id="current-time">00:00:00</span>
-                <span id="current-location">Morelia, Mich.</span>
-            </div>
-            <div class="hud-widget hardware-widget">
-                <div class="hw-item">SYS: <span id="sys-status">ONLINE</span></div>
-                <div class="hw-item">MEM: <span id="hw-ram">18%</span></div>
-                <div class="hw-item">NET: <span id="hw-net">SECURE</span></div>
-            </div>
-        </div>
-    </main>
 
-    <nav id="ciis-taskbar">
-        <button id="start-button" class="taskbar-btn" title="Menú Principal">
-            <svg viewBox="0 0 24 24" fill="#00e5ff" width="22" height="22"><path d="M12 2L2 2v20L12 22z"/></svg>
-        </button>
-        <div id="running-apps"></div>
-        <div id="system-tray">
-            <span class="tray-icon">🌐</span>
-            <span class="tray-icon">🔔</span>
-            <span id="tray-clock">00:00</span>
-        </div>
-    </nav>
+  <!-- Contenedor Principal del Escritorio -->
+  <main id="ciis-desktop">
+    
+    <!-- Área de Ventanas (El WindowManager inyectará las ventanas aquí) -->
+    <div id="window-manager"></div>
 
-    <div id="start-menu" class="hidden">
-        <div class="user-profile">
-            <div class="avatar">XG</div>
-            <div class="user-info">
-                <span class="user-name">Xavier Gaffer</span>
-                <span class="user-role">Investigador Jefe</span>
-            </div>
-        </div>
-        <div class="app-grid" id="start-menu-grid">
-            <!-- Inyectado por el Kernel -->
-        </div>
+    <!-- Widgets del Escritorio (HUD Tecnológico) -->
+    <div id="hud-overlay">
+      <div class="hud-widget time-widget">
+        <span id="current-time">00:00:00</span>
+        <span id="current-location">Morelia, Mich.</span>
+      </div>
+
+      <!-- Indicadores de Hardware (Simulados) -->
+      <div class="hud-widget hardware-widget">
+        <div class="hw-item">CPU: <span id="hw-cpu">2%</span></div>
+        <div class="hw-item">RAM: <span id="hw-ram">18%</span></div>
+        <div class="hw-item">NET: <span id="hw-net">ON</span></div>
+      </div>
     </div>
-    <script type="module" src="js/app.js"></script>
+
+  </main>
+
+  <!-- Barra de Tareas (Dock) -->
+  <nav id="ciis-taskbar">
+    <button id="start-button" class="taskbar-btn" title="Menú Principal">
+      <!-- Fallback SVG embebido por si logo-ciis.png no ha cargado -->
+      <img src="img/logo-ciis.png" alt="CIIS" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwZTVmZiI+PHBhdGggZD0iTTEyIDJMMiAydjIwTDEyIDIyeiIvPjwvc3ZnPg=='">
+    </button>
+
+    <div id="running-apps">
+      <!-- Iconos de aplicaciones activas se inyectarán aquí dinámicamente -->
+    </div>
+
+    <div id="system-tray">
+      <span class="tray-icon" title="Estado de Red">🌐</span>
+      <span class="tray-icon" title="Notificaciones">🔔</span>
+      <span id="tray-clock">00:00</span>
+    </div>
+  </nav>
+
+  <!-- Menú de Inicio (Oculto por defecto) -->
+  <div id="start-menu" class="hidden">
+    <div class="user-profile">
+      <div class="avatar">XG</div>
+      <div class="user-info">
+        <span class="user-name">Xavier Gaffer</span>
+        <span class="user-role">Administrador Institucional</span>
+      </div>
+    </div>
+
+    <div class="app-grid">
+      <button class="app-btn" data-module="dashboard">Dashboard</button>
+      <button class="app-btn" data-module="ciismatria">CIISMATRÍA</button>
+      <button class="app-btn" data-module="expedientes">Expedientes</button>
+      <button class="app-btn" data-module="investigaciones">Investigaciones</button>
+      <button class="app-btn" data-module="archivo">Archivo</button>
+      <button class="app-btn" data-module="protocolos">Protocolos</button>
+      <button class="app-btn" data-module="auditoria">Auditoría</button>
+      <button class="app-btn" data-module="consola">Consola</button>
+      <button class="app-btn" data-module="configuracion">Configuración</button>
+    </div>
+  </div>
+
+  <!-- Scripts Principales -->
+  <script type="module" src="js/app.js"></script>
+
 </body>
 </html>

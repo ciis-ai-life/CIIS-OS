@@ -41,8 +41,8 @@
   <!-- Barra de Tareas (Dock) -->
   <nav id="ciis-taskbar">
     <button id="start-button" class="taskbar-btn" title="Menú Principal">
-      <!-- Fallback SVG embebido por si logo-ciis.png no ha cargado -->
-      <img src="img/logo-ciis.png" alt="CIIS" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwZTVmZiI+PHBhdGggZD0iTTEyIDJMMiAydjIwTDEyIDIyeiIvPjwvc3ZnPg=='">
+      <!-- Mantenemos el fallback cian simple aquí para la barra de tareas -->
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwZTVmZiI+PHBhdGggZD0iTTEyIDJMMiAydjIwTDEyIDIyeiIvPjwvc3ZnPg==" alt="CIIS">
     </button>
 
     <div id="running-apps">
@@ -58,6 +58,11 @@
 
   <!-- Menú de Inicio (Oculto por defecto) -->
   <div id="start-menu" class="hidden">
+    <!-- NUEVO: Integramos el logo adaptado aquí, arriba del perfil -->
+    <div class="system-logo-container">
+        <img src="img/logo-ciis-tech.png" alt="CIIS Authority Seal" class="system-logo">
+    </div>
+
     <div class="user-profile">
       <div class="avatar">XG</div>
       <div class="user-info">

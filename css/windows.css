@@ -1,7 +1,10 @@
 /* ==========================================================================
-   CIIS OS - Estilos de Ventanas Flotantes y Dock
+   CIIS OS - Estilos Principales de Ventanas, Dock y Módulos (windows.css)
    ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. Gestor y Capa de Ventanas (Window Manager Layer)
+   -------------------------------------------------------------------------- */
 #window-manager {
   position: absolute;
   top: 0;
@@ -9,20 +12,28 @@
   width: 100vw;
   height: calc(100vh - 48px);
   pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
 }
 
+/* --------------------------------------------------------------------------
+   2. Estructura de Ventana Flotante
+   -------------------------------------------------------------------------- */
 .window {
   position: absolute;
-  width: 620px;
-  height: 420px;
-  background: rgba(10, 15, 26, 0.92);
-  border: 1px solid var(--border-color);
+  width: 650px;
+  height: 450px;
+  min-width: 340px;
+  min-height: 220px;
+  background: rgba(10, 15, 26, 0.94);
+  border: 1px solid var(--border-color, rgba(0, 229, 255, 0.3));
   border-radius: 8px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 229, 255, 0.15);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 229, 255, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   pointer-events: auto;
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
@@ -39,28 +50,36 @@
   width: 100vw !important;
   height: calc(100vh - 48px) !important;
   border-radius: 0;
+  box-shadow: none;
 }
 
+/* Encabezado y Barra de Título */
 .window-header {
-  background: rgba(4, 7, 13, 0.85);
+  background: rgba(4, 7, 13, 0.9);
   padding: 10px 14px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: move;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color, rgba(0, 229, 255, 0.2));
+  user-select: none;
 }
 
 .window-title {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-color);
+  color: var(--accent-color, #00e5ff);
   letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+/* Controles de la Ventana (Minimizar, Maximizar, Cerrar) */
 .window-controls {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
 .window-btn {
@@ -69,41 +88,315 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: transform 0.15s ease, opacity 0.2s;
 }
 
-.window-btn:hover { opacity: 0.8; }
+.window-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.1);
+}
+
 .btn-close { background: #ff5f56; }
 .btn-minimize { background: #ffbd2e; }
 .btn-maximize { background: #27c93f; }
 
+/* Cuerpo de la Ventana */
 .window-body {
   padding: 18px;
   flex-grow: 1;
   overflow-y: auto;
-  color: var(--text-main);
+  color: var(--text-main, #e0f7fc);
 }
 
-/* Botones de Aplicaciones Activas en la Barra de Tareas */
+/* Tirador para Redimensionar (Resizer) */
+.window-resizer {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+  background: linear-gradient(135deg, transparent 50%, var(--accent-color, #00e5ff) 50%);
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.window-resizer:hover {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   3. Botones de Aplicaciones Activas en la Barra de Tareas (Taskbar / Dock)
+   -------------------------------------------------------------------------- */
 .taskbar-app-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-muted);
-  padding: 6px 12px;
+  color: var(--text-muted, #8a9ba8);
+  padding: 6px 14px;
   border-radius: 6px;
   font-size: 0.8rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   transition: all 0.2s ease;
+  user-select: none;
 }
 
 .taskbar-app-btn:hover {
   background: rgba(0, 229, 255, 0.15);
-  color: var(--text-main);
+  color: var(--text-main, #ffffff);
 }
 
 .taskbar-app-btn.active {
   background: rgba(0, 229, 255, 0.2);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+  border-color: var(--accent-color, #00e5ff);
+  color: var(--accent-color, #00e5ff);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.active-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--accent-color, #00e5ff);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent-color, #00e5ff);
+}
+
+/* --------------------------------------------------------------------------
+   4. Estilos Módulo Dashboard (SOC Monitoring Panel)
+   -------------------------------------------------------------------------- */
+.dashboard-soc {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.soc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.soc-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color, rgba(0, 229, 255, 0.2));
+  padding: 12px 14px;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+.soc-label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #8a9ba8);
+}
+
+.soc-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent-color, #00e5ff);
+  margin: 4px 0;
+}
+
+.soc-sub {
+  font-size: 0.7rem;
+  color: #a0a0a0;
+}
+
+.text-green {
+  color: #27c93f !important;
+}
+
+.soc-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.soc-fill {
+  height: 100%;
+  background: var(--accent-color, #00e5ff);
+  box-shadow: 0 0 8px var(--accent-color, #00e5ff);
+}
+
+.soc-log-box {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--border-color, rgba(0, 229, 255, 0.2));
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.soc-log-box h4 {
+  font-size: 0.85rem;
+  color: var(--accent-color, #00e5ff);
+  margin-bottom: 8px;
+}
+
+.log-stream {
+  height: 120px;
+  overflow-y: auto;
+  font-family: var(--font-code, monospace);
+  font-size: 0.75rem;
+  color: #88d0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.log-entry {
+  border-bottom: 1px dashed rgba(0, 229, 255, 0.1);
+  padding-bottom: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   5. Estilos Módulo CIISMATRÍA
+   -------------------------------------------------------------------------- */
+.ciismatria-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ciis-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color, rgba(0, 229, 255, 0.2));
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.ciis-card h3 {
+  font-size: 0.95rem;
+  color: var(--accent-color, #00e5ff);
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.15);
+  padding-bottom: 6px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 0.75rem;
+  color: var(--text-muted, #8a9ba8);
+}
+
+.form-group input, 
+.form-group select {
+  background: rgba(8, 12, 20, 0.8);
+  border: 1px solid var(--border-color, rgba(0, 229, 255, 0.2));
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--text-main, #ffffff);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.form-group input:focus, 
+.form-group select:focus {
+  border-color: var(--accent-color, #00e5ff);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+.btn-primary {
+  width: 100%;
+  background: rgba(0, 229, 255, 0.2);
+  border: 1px solid var(--accent-color, #00e5ff);
+  color: var(--accent-color, #00e5ff);
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-color, #00e5ff);
+  color: #000;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.5);
+}
+
+/* Grilla de Resultados */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.metric-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-box.highlight {
+  border-color: var(--accent-color, #00e5ff);
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.metric-label {
+  font-size: 0.7rem;
+  color: var(--text-muted, #8a9ba8);
+}
+
+.metric-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent-color, #00e5ff);
+}
+
+.breakdown-box {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.code-text {
+  font-family: var(--font-code, monospace);
+  color: #a0f0ff;
+  word-break: break-all;
+  margin-top: 4px;
+}
+
+.action-bar {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.status-ok {
+  font-size: 0.75rem;
+  color: #27c93f;
+  display: inline-block;
+}
+
+/* Contenido genérico de módulos en espera */
+.module-placeholder {
+  padding: 20px;
+  text-align: center;
+}
+
+.module-placeholder h2 {
+  font-size: 1.2rem;
+  color: var(--accent-color, #00e5ff);
+  margin-bottom: 10px;
 }

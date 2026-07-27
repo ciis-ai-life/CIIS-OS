@@ -18,7 +18,7 @@
   <!-- Contenedor Principal del Escritorio -->
   <main id="ciis-desktop">
     
-    <!-- Área de Ventanas (El WindowManager inyectará las ventanas aquí) -->
+    <!-- Área de Ventanas -->
     <div id="window-manager"></div>
 
     <!-- Widgets del Escritorio (HUD Tecnológico) -->
@@ -28,7 +28,7 @@
         <span id="current-location">Morelia, Mich.</span>
       </div>
 
-      <!-- Indicadores de Hardware (Simulados) -->
+      <!-- Indicadores de Hardware -->
       <div class="hud-widget hardware-widget">
         <div class="hw-item">CPU: <span id="hw-cpu">2%</span></div>
         <div class="hw-item">RAM: <span id="hw-ram">18%</span></div>
@@ -41,13 +41,10 @@
   <!-- Barra de Tareas (Dock) -->
   <nav id="ciis-taskbar">
     <button id="start-button" class="taskbar-btn" title="Menú Principal">
-      <!-- Mantenemos el fallback cian simple aquí para la barra de tareas -->
-      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzAwZTVmZiI+PHBhdGggZD0iTTEyIDJMMiAydjIwTDEyIDIyeiIvPjwvc3ZnPg==" alt="CIIS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00e5ff" width="22" height="22"><path d="M12 2L2 22h20L12 2zm0 3.8L18.6 20H5.4L12 5.8z"/></svg>
     </button>
 
-    <div id="running-apps">
-      <!-- Iconos de aplicaciones activas se inyectarán aquí dinámicamente -->
-    </div>
+    <div id="running-apps"></div>
 
     <div id="system-tray">
       <span class="tray-icon" title="Estado de Red">🌐</span>
@@ -56,11 +53,24 @@
     </div>
   </nav>
 
-  <!-- Menú de Inicio (Oculto por defecto) -->
+  <!-- Menú de Inicio -->
   <div id="start-menu" class="hidden">
-    <!-- NUEVO: Integramos el logo adaptado aquí, arriba del perfil -->
+    <!-- Escudo Holográfico Inyectado Directamente -->
     <div class="system-logo-container">
-        <img src="img/logo-ciis-tech.png" alt="CIIS Authority Seal" class="system-logo">
+      <svg class="system-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+        <g stroke="#00e5ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="250" cy="250" r="220" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+          <circle cx="250" cy="250" r="205" stroke-width="2"/>
+          <path d="M 180 110 L 195 70 L 222 95 L 250 50 L 278 95 L 305 70 L 320 110 Z" stroke-width="2" fill="rgba(0, 229, 255, 0.05)"/>
+          <circle cx="250" cy="40" r="4" fill="#00e5ff"/>
+          <path d="M 180 115 L 320 115" stroke-width="2"/>
+          <path d="M 170 145 H 330 V 270 C 330 350 250 390 250 390 C 250 390 170 350 170 270 Z" stroke-width="3" fill="rgba(6, 9, 17, 0.85)"/>
+          <line x1="250" y1="145" x2="250" y2="388" stroke-width="1.5"/>
+          <line x1="170" y1="250" x2="330" y2="250" stroke-width="1.5"/>
+          <circle cx="250" cy="250" r="20" stroke-width="2" fill="#060911"/>
+          <path d="M 250 236 V 264 M 236 250 H 264" stroke-width="2.5"/>
+        </g>
+      </svg>
     </div>
 
     <div class="user-profile">
@@ -84,8 +94,6 @@
     </div>
   </div>
 
-  <!-- Scripts Principales -->
   <script type="module" src="js/app.js"></script>
-
 </body>
 </html>

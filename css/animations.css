@@ -1,7 +1,31 @@
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes windowOpen { 
-    from { opacity: 0; transform: scale(0.9) translateY(10px); } 
-    to { opacity: 1; transform: scale(1) translateY(0); } 
+/* ==========================================================================
+   CIIS OS - Animaciones y Transiciones Visuales
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-.ciis-window { animation: windowOpen 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-#start-menu:not(.hidden) { animation: fadeIn 0.2s ease-out; }
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.4);
+  }
+}
+
+.window {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hud-widget {
+  animation: pulseGlow 4s infinite ease-in-out;
+}

@@ -1,6 +1,6 @@
 /* ==========================================================================
    CIIS OS - Escritorio, HUD y Barra de Tareas
-   ========================================================================== */
+   ========================================================================= */
 
 #ciis-desktop {
   position: relative;
@@ -144,12 +144,27 @@
   display: none;
 }
 
+/* NUEVO: Estilos para el logo del sistema en el menú */
+.system-logo-container {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 15px;
+}
+
+.system-logo {
+    width: 120px; /* Tamaño prominente pero no excesivo */
+    height: auto;
+    filter: drop-shadow(0 0 5px var(--accent-color)); /* Resplandor adicional */
+}
+
+/* Perfil de Usuario (Actualizado para alinearse) */
 .user-profile {
   display: flex;
   align-items: center;
   gap: 12px;
   padding-bottom: 15px;
-  border-bottom: 1px solid var(--border-color);
   margin-bottom: 15px;
 }
 

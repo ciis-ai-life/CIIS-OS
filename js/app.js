@@ -5,8 +5,8 @@
 import { Kernel } from './kernel.js';
 import { initDesktop } from './desktop.js';
 import { initWindowManager, openWindow } from './windows.js';
+import { getCiismatriaHTML, initCiismatriaEvents } from './ciismatria.js';
 
-// Mapeo de nombres e iconos institucionales para los módulos
 const MODULE_CONFIG = {
     dashboard: { title: 'Dashboard General', icon: '📊' },
     ciismatria: { title: 'CIISMATRÍA', icon: '🔢' },
@@ -20,30 +20,28 @@ const MODULE_CONFIG = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 0. Inicializar Kernel del Sistema y registrar módulos
     Kernel.init();
 
     Object.keys(MODULE_CONFIG).forEach(id => {
         Kernel.registerModule({ id, ...MODULE_CONFIG[id] });
     });
 
-    // 1. Inicializar HUD, Reloj y Menú de Inicio
     initDesktop();
-
-    // 2. Inicializar Gestor de Ventanas
     initWindowManager();
 
-    // 3. Registrar eventos en los botones del Menú de Inicio
     const appButtons = document.querySelectorAll('#start-menu .app-btn');
     appButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const moduleId = btn.getAttribute('data-module');
             const config = MODULE_CONFIG[moduleId] || { title: moduleId, icon: '📄' };
 
-            openWindow(
-                moduleId,
-                config.title,
-                `<div class="module-container">
+            let content = '';
+
+            // Si es el módulo de CIISMATRÍA, cargamos su HTML dinámico
+            if (moduleId === 'ciismatria') {
+                content = getCiismatriaHTML();
+            } else {
+                content = `<div class="module-container">
                     <div class="module-header">
                         <h2>${config.icon} ${config.title}</h2>
                         <span class="status-badge">Estado: Operativo</span>
@@ -52,8 +50,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="module-body">
                         <p>Iniciando módulo de <strong>${config.title}</strong> dentro del entorno seguro de CIIS OS...</p>
                     </div>
-                 </div>`
-            );
+                 </div>`;
+            }
+
+            openWindow(moduleId, `${config.icon} ${config.title}`, content);
+
+            // Si es CIISMATRÍA, activamos sus eventos en la ventana recién creada
+            if (moduleId === 'ciismatria') {
+                const winElem = document.getElementById(`win-${moduleId}`);
+                if (winElem) initCiismatriaEvents(winElem);
+            }
         });
     });
 

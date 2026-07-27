@@ -2,6 +2,7 @@
  * CIIS OS - Punto de Entrada Principal (Orquestador)
  */
 
+import { Kernel } from './kernel.js';
 import { initDesktop } from './desktop.js';
 import { initWindowManager, openWindow } from './windows.js';
 
@@ -19,6 +20,13 @@ const MODULE_CONFIG = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Inicializar Kernel del Sistema y registrar módulos
+    Kernel.init();
+
+    Object.keys(MODULE_CONFIG).forEach(id => {
+        Kernel.registerModule({ id, ...MODULE_CONFIG[id] });
+    });
+
     // 1. Inicializar HUD, Reloj y Menú de Inicio
     initDesktop();
 

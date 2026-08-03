@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ciisos.org/schemas/audit/v1.json",
+  "title": "CIIS OS Audit Event Canonical Schema v1.0",
+  "description": "Especificación JSON Schema v1.0 para la validación del modelo canónico de eventos de auditoría y trazabilidad del proyecto CIIS OS (PIC-140-001).",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_category",
+    "event_type",
+    "timestamp",
+    "severity",
+    "status",
+    "correlation_id",
+    "module",
+    "operation",
+    "actor",
+    "target",
+    "security_context"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "URI del esquema de validación JSON."
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Versión fija del esquema de eventos."
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^AUD-EVT-[0-9A-Z]{10}-[0-9A-Z]{12}$",
+      "description": "Identificador único basado en la norma Prefix-ULID / UUIDv7 (ej. AUD-EVT-01H1BER7S1-9X82B71CA001)."
+    },
+    "event_category": {
+      "type": "string",
+      "enum": [
+        "SYSTEM",
+        "SECURITY",
+        "USER",
+        "AUTH",
+        "DOSSIER",
+        "INVESTIGATION",
+        "CIISMATRIA",
+        "AUDIT",
+        "DATABASE",
+        "CONFIG",
+        "INTEGRATION",
+        "EXPORT",
+        "ERROR",
+        "CRITICAL"
+      ],
+      "description": "Categoría principal dentro de la taxonomía del CIIS OS."
+    },
+    "event_type": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_]+\\.[A-Z0-9_]+\\.[A-Z0-9_]+$",
+      "description": "Tipo de evento en sintaxis canónica: CATEGORÍA.SUBCATEGORÍA.ACCIÓN."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Marca temporal en formato UTC ISO-8601 (YYYY-MM-DDTHH:mm:ss.sssZ)."
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "TRACE",
+        "DEBUG",
+        "INFO",
+        "NOTICE",
+        "WARNING",
+        "ERROR",
+        "CRITICAL",
+        "FATAL"
+      ],
+      "description": "Nivel de severidad normado del 1 al 8."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "PARTIAL"
+      ],
+      "description": "Resultado de la operación auditada."
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Identificador de trazabilidad distribuida para agrupar operaciones relacionadas."
+    },
+    "parent_event": {
+      "type": ["string", "null"],
+      "description": "Identificador event_id del evento padre si aplica."
+    },
+    "module": {
+      "type": "string",
+      "description": "Módulo del ecosistema CIIS OS que genera el evento."
+    },
+    "operation": {
+      "type": "string",
+      "description": "Nombre técnico de la función u operación ejecutada."
+    },
+    "actor": {
+      "type": "object",
+      "required": [
+        "actor_id",
+        "actor_type"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "actor_id": {
+          "type": "string",
+          "description": "Identificador único del actor."
+        },
+        "actor_type": {
+          "type": "string",
+          "enum": [
+            "USER",
+            "ADMINISTRATOR",
+            "INVESTIGATOR",
+            "INTERNAL_SERVICE",
+            "API_CLIENT",
+            "SYSTEM",
+            "CIISMATRIA_ENGINE",
+            "AUTOMATED_PROCESS",
+            "SCHEDULED_JOB"
+          ],
+          "description": "Tipo de entidad responsable de la acción."
+        },
+        "identity_provider": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "client_info": {
+          "type": "object",
+          "properties": {
+            "ip_address": {
+              "type": "string"
+            },
+            "user_agent": {
+              "type": "string"
+            },
+            "device_fingerprint": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "target_type",
+        "target_id"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "target_type": {
+          "type": "string",
+          "enum": [
+            "DOSSIER",
+            "INVESTIGATION",
+            "DOCUMENT",
+            "FILE",
+            "PIC_PROTOCOL",
+            "CONFIGURATION",
+            "USER_IDENTITY",
+            "ROLE_PERMISSION",
+            "DATABASE_SCHEMA",
+            "CIISMATRIA_MATRIX",
+            "AUDIT_LOG",
+            "REPORT"
+          ],
+          "description": "Entidad del ecosistema sobre la cual se realiza la operación."
+        },
+        "target_id": {
+          "type": "string",
+          "description": "Identificador único de la entidad receptora."
+        },
+        "target_version": {
+          "type": ["integer", "string"]
+        },
+        "target_owner": {
+          "type": "string"
+        }
+      }
+    },
+    "changes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "before": {
+          "type": "object",
+          "description": "Estado del recurso previo a la operación."
+        },
+        "after": {
+          "type": "object",
+          "description": "Estado del recurso posterior a la operación."
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Información contextual adicional de la ejecución."
+    },
+    "security_context": {
+      "type": "object",
+      "required": [
+        "signature_algorithm",
+        "previous_hash",
+        "event_hash"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "clearance_level": {
+          "type": "string"
+        },
+        "signature_algorithm": {
+          "type": "string",
+          "description": "Algoritmo de dispersión criptográfica empleado (ej. SHA256)."
+        },
+        "previous_hash": {
+          "type": "string",
+          "description": "Huella criptográfica del evento anterior en la cadena (Hash Chaining)."
+        },
+        "event_hash": {
+          "type": "string",
+          "description": "Huella criptográfica determinista calculada sobre el evento actual."
+        }
+      }
+    }
+  }

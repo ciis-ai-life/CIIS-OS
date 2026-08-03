@@ -1,1 +1,65 @@
+        "event_hash"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "clearance_level": {
+          "type": "string",
+          "enum": [
+            "LEVEL_1_PUBLIC",
+            "LEVEL_2_INTERNAL",
+            "LEVEL_3_CONFIDENTIAL",
+            "LEVEL_4_RESTRICTED",
+            "LEVEL_5_CRITICAL"
+          ],
+          "description": "Nivel de clasificación y autorización de acceso."
+        },
+        "hash_algorithm": {
+          "type": "string",
+          "enum": [
+            "SHA-256",
+            "SHA-384",
+            "SHA-512",
+            "BLAKE3"
+          ],
+          "description": "Algoritmo criptográfico utilizado exclusivamente para el cálculo del event_hash."
+        },
+        "signature_algorithm": {
+          "type": "string",
+          "enum": [
+            "Ed25519",
+            "ECDSA-P256",
+            "RSA-PSS",
+            "HMAC-SHA256",
+            "NONE"
+          ],
+          "description": "Esquema o algoritmo de firma digital de no repudio."
+        },
+        "signature_format": {
+          "type": "string",
+          "enum": [
+            "Base64",
+            "Hex",
+            "RAW",
+            "NONE"
+          ],
+          "description": "Formato de codificación de la firma digital resultante."
+        },
+        "previous_hash": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64,128}$",
+          "description": "Hash del evento anterior en la cadena (64 ceros hexadecimales para evento génesis)."
+        },
+        "event_hash": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64,128}$",
+          "description": "Hash del payload canónico JCS (RFC 8785) del evento actual."
+        },
+        "signature": {
+          "type": ["string", "null"],
+          "description": "Firma criptográfica del hash del evento emitida por la clave privada del nodo emisor."
+        }
+      }
+    }
+  }
+}
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Xavier Gaffer">
+  <meta name="description" content="Centro de Investigación de Identidad Soberana - Sistema Operativo Web">
+  <title>CIIS OS - Centro de Investigación de Identidad Soberana</title>
+
+  <!-- Hojas de Estilo Oficiales -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/desktop.css">
+  <link rel="stylesheet" href="css/windows.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+
+  <!-- Contenedor Principal del Escritorio -->
+  <main id="ciis-desktop">
+    
+    <!-- Área de Ventanas -->
+    <div id="window-manager"></div>
+
+    <!-- Widgets del Escritorio (HUD Tecnológico) -->
+    <div id="hud-overlay">
+      <div class="hud-widget time-widget">
+        <span id="current-time">00:00:00</span>
+        <span id="current-location">Morelia, Mich.</span>
+      </div>
+
+      <!-- Indicadores de Hardware -->
+      <div class="hud-widget hardware-widget">
+        <div class="hw-item">CPU: <span id="hw-cpu">2%</span></div>
+        <div class="hw-item">RAM: <span id="hw-ram">18%</span></div>
+        <div class="hw-item">NET: <span id="hw-net">ON</span></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Barra de Tareas (Dock) -->
+  <nav id="ciis-taskbar">
+    <button id="start-button" class="taskbar-btn" title="Menú Principal">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#00e5ff" width="22" height="22"><path d="M12 2L2 22h20L12 2zm0 3.8L18.6 20H5.4L12 5.8z"/></svg>
+    </button>
+
+    <div id="running-apps"></div>
+
+    <div id="system-tray">
+      <span class="tray-icon" title="Estado de Red">🌐</span>
+      <span class="tray-icon" title="Notificaciones">🔔</span>
+      <span id="tray-clock">00:00</span>
+    </div>
+  </nav>
+
+  <!-- Menú de Inicio -->
+  <div id="start-menu" class="hidden">
+    <!-- Escudo Holográfico Inyectado Directamente -->
+    <div class="system-logo-container">
+      <svg class="system-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+        <g stroke="#00e5ff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="250" cy="250" r="220" stroke-width="2" stroke-dasharray="6 4" opacity="0.6"/>
+          <circle cx="250" cy="250" r="205" stroke-width="2"/>
+          <path d="M 180 110 L 195 70 L 222 95 L 250 50 L 278 95 L 305 70 L 320 110 Z" stroke-width="2" fill="rgba(0, 229, 255, 0.05)"/>
+          <circle cx="250" cy="40" r="4" fill="#00e5ff"/>
+          <path d="M 180 115 L 320 115" stroke-width="2"/>
+          <path d="M 170 145 H 330 V 270 C 330 350 250 390 250 390 C 250 390 170 350 170 270 Z" stroke-width="3" fill="rgba(6, 9, 17, 0.85)"/>
+          <line x1="250" y1="145" x2="250" y2="388" stroke-width="1.5"/>
+          <line x1="170" y1="250" x2="330" y2="250" stroke-width="1.5"/>
+          <circle cx="250" cy="250" r="20" stroke-width="2" fill="#060911"/>
+          <path d="M 250 236 V 264 M 236 250 H 264" stroke-width="2.5"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="user-profile">
+      <div class="avatar">XG</div>
+      <div class="user-info">
+        <span class="user-name">Xavier Gaffer</span>
+        <span class="user-role">Administrador Institucional</span>
+      </div>
+    </div>
+
+    <div class="app-grid">
+      <button class="app-btn" data-module="dashboard">Dashboard</button>
+      <button class="app-btn" data-module="ciismatria">CIISMATRÍA</button>
+      <button class="app-btn" data-module="expedientes">Expedientes</button>
+      <button class="app-btn" data-module="investigaciones">Investigaciones</button>
+      <button class="app-btn" data-module="archivo">Archivo</button>
+      <button class="app-btn" data-module="protocolos">Protocolos</button>
+      <button class="app-btn" data-module="auditoria">Auditoría</button>
+      <button class="app-btn" data-module="consola">Consola</button>
+      <button class="app-btn" data-module="configuracion">Configuración</button>
+    </div>
+  </div>
+
+  <!-- Inicialización del Motor de Auditoría Transversal PIC-140-001 -->
+  <script type="module">
+    import { PIC140 } from './src/pic140/pic140.js';
+    import { Kernel } from './src/kernel/eventBus.js';
+
+    async function bootOS() {
+      console.log("Iniciando secuencia de arranque de CIIS OS...");
+      await PIC140.init();
+      
+      // Publica el evento génesis de arranque del sistema en la cadena de auditoría
+      Kernel.publish('SYS_KERNEL_START', {
+        client: navigator.userAgent,
+        resolution: `${window.innerWidth}x${window.innerHeight}`
+      }, { severity: 'INFO' });
+    }
+
+    bootOS();
+  </script>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

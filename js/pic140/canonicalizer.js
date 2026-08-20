@@ -6,33 +6,59 @@
  *     js/pic140/canonicalizer.js
  *
  * Responsabilidad:
- *     Generar una representación determinista y estable
- *     de un evento PIC-140 antes del cálculo criptográfico.
+ *     Generar una representación canónica, determinista y
+ *     reproducible de un evento PIC-140 antes del cálculo
+ *     criptográfico.
  *
- * Reglas canónicas:
+ * Flujo:
  *
- *     1. El objeto original NO se modifica.
- *     2. event_hash se excluye de la representación.
- *     3. Las claves se ordenan lexicográficamente.
- *     4. Los objetos anidados también se ordenan.
- *     5. Los arrays conservan su orden original.
- *     6. JSON.stringify() produce la representación final.
+ *     validated event
+ *          │
+ *          ▼
+ *     canonicalize()
+ *          │
+ *          ▼
+ *     UTF-8 canonical JSON
+ *          │
+ *          ▼
+ *     hashEngine
+ *
+ * Principios:
+ *
+ *     - Determinismo.
+ *     - Ordenamiento lexicográfico de claves.
+ *     - No mutación del evento original.
+ *     - Exclusión de event_hash.
+ *     - Recursividad para objetos y arrays.
+ *     - JSON válido y reproducible.
  *
  * IMPORTANTE:
  *     Este módulo NO:
  *
- *     - calcula SHA-256;
- *     - genera event_hash;
- *     - persiste eventos;
- *     - modifica el evento original.
+ *     - calcula hashes;
+ *     - persiste datos;
+ *     - consulta IndexedDB;
+ *     - modifica el evento original;
+ *     - publica eventos en el Kernel.
  */
 
 
 /* =========================================================
-   CONSTANTES
+   CAMPOS EXCLUIDOS DEL HASH
    ========================================================= */
 
-const HASH_FIELD = 'event_hash';
+/**
+ * Campos que no forman parte de la representación
+ * canónica utilizada para calcular event_hash.
+ *
+ * event_hash debe excluirse porque su propio valor depende
+ * del contenido que se está utilizando para calcularlo.
+ */
+const EXCLUDED_FIELDS = Object.freeze([
+
+    'event_hash',
+
+]);
 
 
 /* =========================================================
@@ -40,14 +66,24 @@ const HASH_FIELD = 'event_hash';
    ========================================================= */
 
 /**
- * Canonicaliza un evento PIC-140.
+ * Genera la representación canónica de un evento.
  *
- * @param {Object} event
+ * @param {unknown} event
  * @returns {string}
  */
 function canonicalize(event) {
 
-    validateInput(event);
+    if (
+        event === null ||
+        typeof event !== 'object' ||
+        Array.isArray(event)
+    ) {
+
+        throw new TypeError(
+            '[PIC-140 Canonicalizer] El evento debe ser un objeto.'
+        );
+
+    }
 
 
     const canonicalObject =
@@ -69,7 +105,12 @@ function canonicalize(event) {
    ========================================================= */
 
 /**
- * Canonicaliza cualquier valor JSON compatible.
+ * Canonicaliza cualquier valor JSON-compatible.
+ *
+ * Los objetos se ordenan lexicográficamente por clave.
+ *
+ * Los arrays conservan estrictamente su orden original,
+ * ya que el orden de un array forma parte de su significado.
  *
  * @param {*} value
  * @param {boolean} isRoot
@@ -80,23 +121,18 @@ function canonicalizeValue(
     isRoot = false
 ) {
 
-    /* -----------------------------------------------------
-       NULL
-       ----------------------------------------------------- */
-
-    if (value === null) {
+    if (
+        value === null
+    ) {
 
         return null;
 
     }
 
 
-    /* -----------------------------------------------------
-       PRIMITIVOS
-       ----------------------------------------------------- */
-
     if (
-        typeof value !== 'object'
+        typeof value === 'string' ||
+        typeof value === 'boolean'
     ) {
 
         return value;
@@ -104,9 +140,25 @@ function canonicalizeValue(
     }
 
 
-    /* -----------------------------------------------------
-       ARRAYS
-       ----------------------------------------------------- */
+    if (
+        typeof value === 'number'
+    ) {
+
+        if (
+            !Number.isFinite(value)
+        ) {
+
+            throw new TypeError(
+                '[PIC-140 Canonicalizer] Los números deben ser finitos.'
+            );
+
+        }
+
+
+        return value;
+
+    }
+
 
     if (
         Array.isArray(value)
@@ -123,106 +175,98 @@ function canonicalizeValue(
     }
 
 
-    /* -----------------------------------------------------
-       OBJETOS
-       ----------------------------------------------------- */
-
-    const result = {};
-
-
-    const keys =
-        Object.keys(value)
-            .filter(
-                key =>
-                    !(
-                        isRoot &&
-                        key === HASH_FIELD
-                    )
-            )
-            .sort();
-
-
-    for (
-        const key
-        of keys
-    ) {
-
-        result[key] =
-            canonicalizeValue(
-                value[key],
-                false
-            );
-
-    }
-
-
-    return result;
-
-}
-
-
-/* =========================================================
-   VALIDACIÓN
-   ========================================================= */
-
-/**
- * Valida la entrada al canonicalizer.
- *
- * @param {*} event
- * @returns {void}
- */
-function validateInput(event) {
-
     if (
-        event === null ||
-        typeof event !== 'object' ||
-        Array.isArray(event)
+        typeof value === 'object'
     ) {
 
-        throw new TypeError(
-            '[PIC-140 Canonicalizer] El evento debe ser un objeto.'
-        );
+        const result = {};
+
+
+        const keys =
+            Object.keys(value)
+                .filter(
+                    key =>
+                        !(
+                            isRoot &&
+                            EXCLUDED_FIELDS.includes(key)
+                        )
+                )
+                .sort(
+                    compareKeys
+                );
+
+
+        for (
+            const key
+            of keys
+        ) {
+
+            result[key] =
+                canonicalizeValue(
+                    value[key],
+                    false
+                );
+
+        }
+
+
+        return result;
 
     }
 
-}
 
-
-/* =========================================================
-   UTILIDADES DE INSPECCIÓN
-   ========================================================= */
-
-/**
- * Devuelve el objeto canónico sin convertirlo todavía
- * a JSON.
- *
- * Esta función es útil para pruebas unitarias.
- *
- * @param {Object} event
- * @returns {Object}
- */
-function canonicalizeObject(event) {
-
-    validateInput(event);
-
-
-    return canonicalizeValue(
-        event,
-        true
+    throw new TypeError(
+        `[PIC-140 Canonicalizer] Tipo de valor no soportado: ${typeof value}`
     );
 
 }
 
 
+/* =========================================================
+   ORDENAMIENTO DE CLAVES
+   ========================================================= */
+
 /**
- * Comprueba si dos eventos producen exactamente la misma
+ * Comparador lexicográfico determinista.
+ *
+ * Se utiliza el orden Unicode/UTF-16 natural de JavaScript.
+ *
+ * @param {string} a
+ * @param {string} b
+ * @returns {number}
+ */
+function compareKeys(a, b) {
+
+    if (a < b) {
+        return -1;
+    }
+
+
+    if (a > b) {
+        return 1;
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================================
+   VERIFICACIÓN DE CANONICIDAD
+   ========================================================= */
+
+/**
+ * Comprueba si dos objetos producen exactamente la misma
  * representación canónica.
  *
- * @param {Object} first
- * @param {Object} second
+ * Esta función es útil para pruebas deterministas.
+ *
+ * @param {unknown} first
+ * @param {unknown} second
  * @returns {boolean}
  */
-function areCanonicallyEqual(
+function isCanonicalEquivalent(
     first,
     second
 ) {
@@ -236,6 +280,75 @@ function areCanonicallyEqual(
 
 
 /* =========================================================
+   CLON CANÓNICO
+   ========================================================= */
+
+/**
+ * Devuelve el objeto canónico antes de serializarlo.
+ *
+ * Esta función es útil para pruebas y diagnósticos.
+ *
+ * El resultado es un nuevo objeto y nunca modifica
+ * el objeto original.
+ *
+ * @param {unknown} event
+ * @returns {Object}
+ */
+function getCanonicalObject(event) {
+
+    if (
+        event === null ||
+        typeof event !== 'object' ||
+        Array.isArray(event)
+    ) {
+
+        throw new TypeError(
+            '[PIC-140 Canonicalizer] El evento debe ser un objeto.'
+        );
+
+    }
+
+
+    return canonicalizeValue(
+        event,
+        true
+    );
+
+}
+
+
+/* =========================================================
+   VERIFICACIÓN DE EVENT_HASH
+   ========================================================= */
+
+/**
+ * Indica si event_hash está presente en el objeto raíz.
+ *
+ * @param {Object} event
+ * @returns {boolean}
+ */
+function hasEventHash(event) {
+
+    if (
+        event === null ||
+        typeof event !== 'object' ||
+        Array.isArray(event)
+    ) {
+
+        return false;
+
+    }
+
+
+    return Object.prototype.hasOwnProperty.call(
+        event,
+        'event_hash'
+    );
+
+}
+
+
+/* =========================================================
    EXPORTACIONES
    ========================================================= */
 
@@ -243,10 +356,12 @@ export {
 
     canonicalize,
 
-    canonicalizeObject,
+    getCanonicalObject,
 
-    areCanonicallyEqual,
+    isCanonicalEquivalent,
 
-    HASH_FIELD,
+    hasEventHash,
+
+    EXCLUDED_FIELDS,
 
 };

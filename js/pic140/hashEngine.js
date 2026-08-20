@@ -6,40 +6,41 @@
  *     js/pic140/hashEngine.js
  *
  * Responsabilidad:
- *     Calcular SHA-256 sobre una representación canónica
- *     previamente generada por canonicalizer.js.
+ *     Calcular el hash criptográfico SHA-256 de la
+ *     representación canónica de un evento PIC-140.
  *
  * Flujo:
  *
- *     event
- *        │
- *        ▼
+ *     validated event
+ *          │
+ *          ▼
  *     canonicalize()
- *        │
- *        ▼
- *     canonical string
- *        │
- *        ▼
+ *          │
+ *          ▼
  *     calculateHash()
- *        │
- *        ▼
+ *          │
+ *          ▼
  *     SHA-256
- *        │
- *        ▼
- *     64 hexadecimal characters
+ *          │
+ *          ▼
+ *     hexadecimal de 64 caracteres
+ *
+ * Principios:
+ *
+ *     - SHA-256 mediante Web Crypto API.
+ *     - Entrada exclusivamente canónica.
+ *     - Resultado determinista.
+ *     - Conversión binaria → hexadecimal sin pérdida.
+ *     - Preservación obligatoria de ceros iniciales.
  *
  * IMPORTANTE:
  *     Este módulo NO:
  *
- *     - canonicaliza eventos;
  *     - modifica eventos;
- *     - persiste eventos;
- *     - genera event_id;
- *     - administra la cola FIFO;
- *     - escribe directamente en IndexedDB.
- *
- * La entrada criptográfica debe ser exactamente la salida
- * de canonicalize().
+ *     - persiste datos;
+ *     - consulta IndexedDB;
+ *     - publica eventos en Kernel;
+ *     - añade event_hash automáticamente al evento.
  */
 
 
@@ -49,8 +50,6 @@
 
 const HASH_ALGORITHM = 'SHA-256';
 
-const HASH_BYTE_LENGTH = 32;
-
 const HASH_HEX_LENGTH = 64;
 
 
@@ -59,7 +58,7 @@ const HASH_HEX_LENGTH = 64;
    ========================================================= */
 
 /**
- * Calcula SHA-256 de una cadena canónica.
+ * Calcula SHA-256 sobre una cadena canónica.
  *
  * @param {string} canonicalData
  * @returns {Promise<string>}
@@ -68,19 +67,29 @@ async function calculateHash(
     canonicalData
 ) {
 
-    validateCanonicalData(
+    validateInput(
         canonicalData
     );
 
 
-    ensureWebCrypto();
+    if (
+        typeof crypto === 'undefined' ||
+        !crypto.subtle ||
+        typeof crypto.subtle.digest !== 'function'
+    ) {
+
+        throw new Error(
+            '[PIC-140 HashEngine] Web Crypto API no disponible.'
+        );
+
+    }
 
 
     const encoder =
         new TextEncoder();
 
 
-    const data =
+    const encodedData =
         encoder.encode(
             canonicalData
         );
@@ -89,21 +98,36 @@ async function calculateHash(
     const digest =
         await crypto.subtle.digest(
             HASH_ALGORITHM,
-            data
+            encodedData
         );
 
 
     const hash =
-        bytesToHex(
-            new Uint8Array(
-                digest
-            )
+        bufferToHex(
+            digest
         );
 
 
-    validateHashOutput(
-        hash
-    );
+    if (
+        hash.length !== HASH_HEX_LENGTH
+    ) {
+
+        throw new Error(
+            '[PIC-140 HashEngine] SHA-256 produjo una longitud hexadecimal inválida.'
+        );
+
+    }
+
+
+    if (
+        !/^[0-9a-f]{64}$/.test(hash)
+    ) {
+
+        throw new Error(
+            '[PIC-140 HashEngine] El resultado SHA-256 no es hexadecimal válido.'
+        );
+
+    }
 
 
     return hash;
@@ -116,14 +140,12 @@ async function calculateHash(
    ========================================================= */
 
 /**
- * Verifica que la entrada sea una cadena.
+ * Valida la representación canónica recibida.
  *
  * @param {*} value
  * @returns {void}
  */
-function validateCanonicalData(
-    value
-) {
+function validateInput(value) {
 
     if (
         typeof value !== 'string'
@@ -139,91 +161,42 @@ function validateCanonicalData(
 
 
 /* =========================================================
-   WEB CRYPTO
+   CONVERSIÓN BINARIA → HEXADECIMAL
    ========================================================= */
 
 /**
- * Verifica la disponibilidad de Web Crypto.
+ * Convierte un ArrayBuffer en una cadena hexadecimal.
  *
- * @returns {void}
- */
-function ensureWebCrypto() {
-
-    if (
-        typeof crypto === 'undefined'
-    ) {
-
-        throw new Error(
-            '[PIC-140 HashEngine] Web Crypto API no está disponible.'
-        );
-
-    }
-
-
-    if (
-        typeof crypto.subtle ===
-        'undefined'
-    ) {
-
-        throw new Error(
-            '[PIC-140 HashEngine] crypto.subtle no está disponible.'
-        );
-
-    }
-
-
-    if (
-        typeof crypto.subtle.digest !==
-        'function'
-    ) {
-
-        throw new Error(
-            '[PIC-140 HashEngine] crypto.subtle.digest() no está disponible.'
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   BYTE → HEX
-   ========================================================= */
-
-/**
- * Convierte bytes a hexadecimal.
+ * IMPORTANTE:
  *
- * Cada byte genera exactamente dos caracteres.
+ * Cada byte debe ocupar exactamente dos caracteres.
  *
  * Ejemplo:
  *
- *     0  → "00"
- *     1  → "01"
- *     15 → "0f"
- *     255 → "ff"
+ *     byte = 0
+ *     hexadecimal = "00"
  *
- * Esto garantiza que SHA-256 produzca exactamente
- * 64 caracteres hexadecimales.
+ * No:
  *
- * @param {Uint8Array} bytes
+ *     "0"
+ *
+ * El uso de padStart(2, '0') garantiza que los ceros
+ * iniciales no se pierdan.
+ *
+ * @param {ArrayBuffer} buffer
  * @returns {string}
  */
-function bytesToHex(
-    bytes
+function bufferToHex(
+    buffer
 ) {
 
-    if (
-        !(bytes instanceof Uint8Array)
-    ) {
-
-        throw new TypeError(
-            '[PIC-140 HashEngine] bytesToHex requiere Uint8Array.'
+    const bytes =
+        new Uint8Array(
+            buffer
         );
 
-    }
 
-
-    let hex =
+    let result =
         '';
 
 
@@ -232,7 +205,7 @@ function bytesToHex(
         of bytes
     ) {
 
-        hex +=
+        result +=
             byte
                 .toString(16)
                 .padStart(2, '0');
@@ -240,83 +213,99 @@ function bytesToHex(
     }
 
 
-    return hex;
+    return result;
 
 }
 
 
 /* =========================================================
-   VALIDACIÓN DE SALIDA
+   VERIFICACIÓN DE HASH
    ========================================================= */
 
 /**
- * Verifica que el hash generado tenga exactamente
- * el formato SHA-256 esperado.
+ * Comprueba si una cadena tiene el formato exacto
+ * de un SHA-256 hexadecimal.
  *
- * @param {string} hash
- * @returns {void}
+ * @param {*} hash
+ * @returns {boolean}
  */
-function validateHashOutput(
+function isValidHash(
     hash
 ) {
 
+    return (
+        typeof hash === 'string' &&
+        hash.length === HASH_HEX_LENGTH &&
+        /^[0-9a-f]{64}$/i.test(hash)
+    );
+
+}
+
+
+/**
+ * Calcula nuevamente el hash y compara el resultado
+ * con un hash esperado.
+ *
+ * @param {string} canonicalData
+ * @param {string} expectedHash
+ * @returns {Promise<boolean>}
+ */
+async function verifyHash(
+    canonicalData,
+    expectedHash
+) {
+
     if (
-        typeof hash !== 'string'
-    ) {
-
-        throw new TypeError(
-            '[PIC-140 HashEngine] El hash generado no es una cadena.'
-        );
-
-    }
-
-
-    if (
-        hash.length !== HASH_HEX_LENGTH
-    ) {
-
-        throw new Error(
-            `[PIC-140 HashEngine] Longitud SHA-256 inválida: ${hash.length}.`
-        );
-
-    }
-
-
-    if (
-        !/^[0-9a-f]{64}$/.test(
-            hash
+        !isValidHash(
+            expectedHash
         )
     ) {
 
-        throw new Error(
-            '[PIC-140 HashEngine] El hash contiene caracteres no hexadecimales.'
-        );
+        return false;
 
     }
+
+
+    const calculatedHash =
+        await calculateHash(
+            canonicalData
+        );
+
+
+    return (
+        calculatedHash.toLowerCase() ===
+        expectedHash.toLowerCase()
+    );
 
 }
 
 
 /* =========================================================
-   FUNCIÓN DE PRUEBA
+   INFORMACIÓN DEL MOTOR
    ========================================================= */
 
 /**
- * Calcula directamente el hash SHA-256 de una cadena.
+ * Devuelve información inmutable sobre el motor.
  *
- * Esta función es un alias explícito para pruebas y
- * diagnósticos.
- *
- * @param {string} value
- * @returns {Promise<string>}
+ * @returns {Object}
  */
-async function sha256(
-    value
-) {
+function getHashEngineInfo() {
 
-    return calculateHash(
-        value
-    );
+    return Object.freeze({
+
+        algorithm:
+            HASH_ALGORITHM,
+
+        outputFormat:
+            'lowercase hexadecimal',
+
+        outputLength:
+            HASH_HEX_LENGTH,
+
+        webCrypto:
+            true,
+
+    });
 
 }
 
@@ -329,15 +318,13 @@ export {
 
     calculateHash,
 
-    sha256,
+    verifyHash,
 
-    bytesToHex,
+    isValidHash,
 
-    validateHashOutput,
+    getHashEngineInfo,
 
     HASH_ALGORITHM,
-
-    HASH_BYTE_LENGTH,
 
     HASH_HEX_LENGTH,
 

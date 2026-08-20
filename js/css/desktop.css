@@ -1,0 +1,1250 @@
+/*
+ * CIIS OS
+ * Desktop Interface Styles
+ *
+ * Archivo:
+ *     css/desktop.css
+ *
+ * Responsabilidad:
+ *     Interfaz visual del escritorio CIIS OS.
+ */
+
+
+/* =========================================================
+   DESKTOP
+   ========================================================= */
+
+#desktop {
+
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    width:
+        100vw;
+
+    height:
+        100vh;
+
+    overflow:
+        hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(45, 65, 110, 0.35),
+            transparent 55%
+        ),
+        linear-gradient(
+            135deg,
+            #080d19,
+            #101a2e 50%,
+            #070b14
+        );
+
+}
+
+
+/* =========================================================
+   CAPA DE ESCRITORIO
+   ========================================================= */
+
+.desktop-background {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   ICONOS DEL ESCRITORIO
+   ========================================================= */
+
+.desktop-icons {
+
+    position:
+        absolute;
+
+    top:
+        20px;
+
+    left:
+        20px;
+
+    display:
+        grid;
+
+    grid-auto-flow:
+        row;
+
+    grid-auto-rows:
+        min-content;
+
+    gap:
+        12px;
+
+    z-index:
+        10;
+
+}
+
+
+.desktop-icon {
+
+    width:
+        82px;
+
+    min-height:
+        82px;
+
+    padding:
+        8px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        #ffffff;
+
+    text-align:
+        center;
+
+    cursor:
+        pointer;
+
+    user-select:
+        none;
+
+    transition:
+        background 140ms ease,
+        border-color 140ms ease;
+
+}
+
+
+.desktop-icon:hover {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border-color:
+        rgba(255, 255, 255, 0.10);
+
+}
+
+
+.desktop-icon:focus-visible {
+
+    outline:
+        2px solid rgba(255, 255, 255, 0.55);
+
+    outline-offset:
+        2px;
+
+}
+
+
+.desktop-icon-symbol {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-size:
+        28px;
+
+}
+
+
+.desktop-icon-label {
+
+    max-width:
+        76px;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    font-size:
+        12px;
+
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.75);
+
+}
+
+
+/* =========================================================
+   TASKBAR
+   ========================================================= */
+
+#taskbar {
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    bottom:
+        0;
+
+    height:
+        54px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        7px 10px;
+
+    background:
+        rgba(8, 12, 23, 0.92);
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.12);
+
+    backdrop-filter:
+        blur(16px);
+
+    -webkit-backdrop-filter:
+        blur(16px);
+
+    z-index:
+        1000;
+
+}
+
+
+/* =========================================================
+   START BUTTON
+   ========================================================= */
+
+#start-button {
+
+    height:
+        40px;
+
+    min-width:
+        48px;
+
+    padding:
+        0 12px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        7px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    color:
+        #ffffff;
+
+    cursor:
+        pointer;
+
+    transition:
+        background 140ms ease;
+
+}
+
+
+#start-button:hover {
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+}
+
+
+#start-button:active {
+
+    background:
+        rgba(255, 255, 255, 0.16);
+
+}
+
+
+.start-icon {
+
+    font-size:
+        20px;
+
+    line-height:
+        1;
+
+}
+
+
+/* =========================================================
+   TASKBAR APPLICATION AREA
+   ========================================================= */
+
+#taskbar-apps {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    overflow:
+        hidden;
+
+}
+
+
+/* =========================================================
+   TASKBAR APPLICATION BUTTON
+   ========================================================= */
+
+.taskbar-app {
+
+    height:
+        38px;
+
+    max-width:
+        180px;
+
+    padding:
+        0 12px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        7px;
+
+    background:
+        transparent;
+
+    color:
+        #ffffff;
+
+    cursor:
+        pointer;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+}
+
+
+.taskbar-app:hover {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+}
+
+
+.taskbar-app.active {
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    border-color:
+        rgba(255, 255, 255, 0.12);
+
+}
+
+
+/* =========================================================
+   SYSTEM TRAY
+   ========================================================= */
+
+#system-tray {
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding:
+        0 8px;
+
+}
+
+
+.system-status {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+    color:
+        #c7cfdf;
+
+    font-size:
+        12px;
+
+}
+
+
+.status-dot {
+
+    width:
+        7px;
+
+    height:
+        7px;
+
+    border-radius:
+        50%;
+
+    background:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   CLOCK
+   ========================================================= */
+
+#clock {
+
+    min-width:
+        72px;
+
+    padding:
+        4px 6px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        13px;
+
+    text-align:
+        center;
+
+    font-variant-numeric:
+        tabular-nums;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   START MENU
+   ========================================================= */
+
+#start-menu {
+
+    position:
+        absolute;
+
+    left:
+        10px;
+
+    bottom:
+        62px;
+
+    width:
+        340px;
+
+    max-width:
+        calc(100vw - 20px);
+
+    max-height:
+        calc(100vh - 80px);
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    overflow:
+        hidden;
+
+    background:
+        rgba(13, 19, 34, 0.97);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.13);
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.48);
+
+    backdrop-filter:
+        blur(20px);
+
+    -webkit-backdrop-filter:
+        blur(20px);
+
+    z-index:
+        2000;
+
+}
+
+
+#start-menu[hidden] {
+
+    display:
+        none;
+
+}
+
+
+/* =========================================================
+   START MENU HEADER
+   ========================================================= */
+
+.start-menu-header {
+
+    padding:
+        18px;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
+
+}
+
+
+.start-menu-title {
+
+    margin:
+        0;
+
+    color:
+        #ffffff;
+
+    font-size:
+        17px;
+
+    font-weight:
+        700;
+
+}
+
+
+.start-menu-subtitle {
+
+    margin:
+        4px 0 0;
+
+    color:
+        #9da8bd;
+
+    font-size:
+        12px;
+
+}
+
+
+/* =========================================================
+   START MENU CONTENT
+   ========================================================= */
+
+.start-menu-content {
+
+    flex:
+        1;
+
+    overflow:
+        auto;
+
+    padding:
+        10px;
+
+}
+
+
+.start-menu-section-title {
+
+    padding:
+        7px 8px;
+
+    color:
+        #8995aa;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        0.08em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =========================================================
+   START MENU ITEMS
+   ========================================================= */
+
+.start-menu-item {
+
+    width:
+        100%;
+
+    min-height:
+        46px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        11px;
+
+    padding:
+        7px 10px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        #ffffff;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+}
+
+
+.start-menu-item:hover {
+
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border-color:
+        rgba(255, 255, 255, 0.08);
+
+}
+
+
+.start-menu-item-icon {
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    font-size:
+        20px;
+
+}
+
+
+.start-menu-item-text {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+}
+
+
+.start-menu-item-title {
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    font-size:
+        13px;
+
+}
+
+
+.start-menu-item-description {
+
+    margin-top:
+        2px;
+
+    color:
+        #8f9bb0;
+
+    font-size:
+        11px;
+
+}
+
+
+/* =========================================================
+   WINDOWS
+   ========================================================= */
+
+.window {
+
+    position:
+        absolute;
+
+    min-width:
+        280px;
+
+    min-height:
+        180px;
+
+    overflow:
+        hidden;
+
+    background:
+        rgba(15, 22, 39, 0.96);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.14);
+
+    border-radius:
+        10px;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.45);
+
+    z-index:
+        100;
+
+}
+
+
+.window.active {
+
+    border-color:
+        rgba(255, 255, 255, 0.24);
+
+    box-shadow:
+        0 22px 55px rgba(0, 0, 0, 0.55);
+
+}
+
+
+/* =========================================================
+   WINDOW HEADER
+   ========================================================= */
+
+.window-header {
+
+    height:
+        40px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        0 8px 0 12px;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    user-select:
+        none;
+
+    cursor:
+        move;
+
+}
+
+
+.window-title {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    color:
+        #ffffff;
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   WINDOW CONTROLS
+   ========================================================= */
+
+.window-controls {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        4px;
+
+}
+
+
+.window-control {
+
+    width:
+        30px;
+
+    height:
+        28px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        5px;
+
+    background:
+        transparent;
+
+    color:
+        #cbd3e1;
+
+    cursor:
+        pointer;
+
+}
+
+
+.window-control:hover {
+
+    background:
+        rgba(255, 255, 255, 0.09);
+
+}
+
+
+.window-control.close:hover {
+
+    background:
+        rgba(190, 55, 55, 0.75);
+
+    color:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   WINDOW CONTENT
+   ========================================================= */
+
+.window-content {
+
+    height:
+        calc(100% - 40px);
+
+    padding:
+        14px;
+
+    overflow:
+        auto;
+
+    color:
+        #dce2ee;
+
+}
+
+
+/* =========================================================
+   MAXIMIZADA
+   ========================================================= */
+
+.window.maximized {
+
+    top:
+        0 !important;
+
+    left:
+        0 !important;
+
+    width:
+        100% !important;
+
+    height:
+        calc(100% - 54px) !important;
+
+    border-radius:
+        0;
+
+}
+
+
+/* =========================================================
+   MINIMIZADA
+   ========================================================= */
+
+.window.minimized {
+
+    display:
+        none;
+
+}
+
+
+/* =========================================================
+   CIIS OS BRANDING
+   ========================================================= */
+
+.ciis-brand {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+}
+
+
+.ciis-brand-mark {
+
+    width:
+        30px;
+
+    height:
+        30px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.15);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+
+    font-size:
+        17px;
+
+}
+
+
+.ciis-brand-name {
+
+    color:
+        #ffffff;
+
+    font-size:
+        14px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   PANEL DE ESTADO PIC-140
+   ========================================================= */
+
+.pic140-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        8px 10px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color:
+        #b8c2d5;
+
+    font-size:
+        12px;
+
+}
+
+
+.pic140-status-dot {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    border-radius:
+        50%;
+
+    background:
+        currentColor;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (
+    max-width: 768px
+) {
+
+    #taskbar {
+
+        height:
+            50px;
+
+    }
+
+
+    #start-menu {
+
+        left:
+            6px;
+
+        bottom:
+            56px;
+
+        width:
+            calc(100vw - 12px);
+
+    }
+
+
+    .desktop-icons {
+
+        top:
+            12px;
+
+        left:
+            12px;
+
+    }
+
+
+    .desktop-icon {
+
+        width:
+            72px;
+
+        min-height:
+            72px;
+
+    }
+
+
+    .window {
+
+        min-width:
+            240px;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCCIÓN DE MOVIMIENTO
+   ========================================================= */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    .desktop-icon,
+    .taskbar-app,
+    #start-button {
+
+        transition:
+            none;
+
+    }
+
+}

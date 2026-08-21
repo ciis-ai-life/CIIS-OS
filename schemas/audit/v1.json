@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ciis.life/schemas/audit/v1.json",
+  "title": "CIIS OS PIC-140 Audit Event",
+  "description": "Contrato canónico del evento de auditoría PIC-140.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event_id",
+    "event_category",
+    "event_type",
+    "timestamp",
+    "severity",
+    "status",
+    "correlation_id",
+    "module",
+    "operation",
+    "actor",
+    "target",
+    "security_context",
+    "chain_height",
+    "event_hash"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^AUD-EVT-[0-9A-HJKMNP-TV-Z]{26}$"
+    },
+    "event_category": {
+      "type": "string",
+      "minLength": 1
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$",
+      "format": "date-time"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "DEBUG",
+        "INFO",
+        "NOTICE",
+        "WARNING",
+        "ERROR",
+        "CRITICAL"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "REJECTED",
+        "PENDING",
+        "ERROR"
+      ]
+    },
+    "correlation_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "module": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "actor": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "target": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "security_context": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "chain_height": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="CIIS OS — Sistema Operativo Web del Centro de Investigación de Identidad Soberana"
+    >
+
+    <meta
+        name="author"
+        content="CIIS"
+    >
+
+    <title>CIIS OS</title>
+
+    <!-- =====================================================
+         CIIS OS — HOJAS DE ESTILO
+         ===================================================== -->
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/desktop.css">
+
+</head>
+
+<body>
+
+    <!-- =====================================================
+         CIIS OS — CONTENEDOR PRINCIPAL
+         ===================================================== -->
+
+    <main
+        id="ciis-os"
+        class="ciis-os"
+        aria-label="CIIS OS"
+    >
+
+        <!-- =================================================
+             ESCRITORIO
+             ================================================= -->
+
+        <section
+            id="desktop"
+            class="desktop"
+            aria-label="Escritorio de CIIS OS"
+        >
+
+            <!-- =============================================
+                 BARRA DEL SISTEMA
+                 ============================================= -->
+
+            <header
+                id="system-bar"
+                class="system-bar"
+            >
+
+                <button
+                    id="start-button"
+                    class="start-button"
+                    type="button"
+                    aria-label="Abrir menú principal"
+                    aria-expanded="false"
+                    aria-controls="start-menu"
+                >
+                    CIIS
+                </button>
+
+
+                <div
+                    id="system-status"
+                    class="system-status"
+                    aria-label="Estado del sistema"
+                >
+
+                    <span
+                        id="system-status-indicator"
+                        class="system-status-indicator"
+                        aria-hidden="true"
+                    ></span>
+
+                    <span
+                        id="system-status-text"
+                    >
+                        SISTEMA
+                    </span>
+
+                </div>
+
+
+                <time
+                    id="clock"
+                    class="clock"
+                    aria-label="Hora del sistema"
+                >
+                    --:--:--
+                </time>
+
+            </header>
+
+
+            <!-- =============================================
+                 MENÚ PRINCIPAL
+                 ============================================= -->
+
+            <nav
+                id="start-menu"
+                class="start-menu"
+                aria-label="Menú principal"
+                hidden
+            >
+
+                <div
+                    class="start-menu-header"
+                >
+
+                    <strong>CIIS OS</strong>
+
+                    <span>
+                        Centro de Investigación de Identidad Soberana
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="application-menu"
+                    class="application-menu"
+                >
+
+                    <button
+                        type="button"
+                        class="application-button"
+                        data-application="ciismatria"
+                    >
+
+                        <span
+                            class="application-icon"
+                            aria-hidden="true"
+                        >
+                            ∑
+                        </span>
+
+                        <span
+                            class="application-name"
+                        >
+                            CIISMATRÍA
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="application-button"
+                        data-application="pic140"
+                    >
+
+                        <span
+                            class="application-icon"
+                            aria-hidden="true"
+                        >
+                            ◈
+                        </span>
+
+                        <span
+                            class="application-name"
+                        >
+                            Auditoría PIC-140
+                        </span>
+
+                    </button>
+
+
+                    <!-- =================================================
+                         CIIS-DOC-BASE-001
+                         ================================================= -->
+
+                    <button
+                        type="button"
+                        class="application-button"
+                        data-application="simboliza-representa"
+                    >
+
+                        <span
+                            class="application-icon"
+                            aria-hidden="true"
+                        >
+                            ◉
+                        </span>
+
+                        <span
+                            class="application-name"
+                        >
+                            Simboliza y Representa
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </nav>
+
+
+            <!-- =============================================
+                 ÁREA DEL ESCRITORIO
+                 ============================================= -->
+
+            <section
+                id="desktop-area"
+                class="desktop-area"
+                aria-label="Área de trabajo"
+            >
+                <!--
+                    El contenido dinámico del escritorio será
+                    administrado por los módulos JavaScript.
+                -->
+            </section>
+
+
+            <!-- =============================================
+                 ADMINISTRADOR DE VENTANAS
+                 ============================================= -->
+
+            <section
+                id="window-manager"
+                class="window-manager"
+                aria-label="Administrador de ventanas"
+            >
+                <!--
+                    Las ventanas serán creadas dinámicamente
+                    por windows.js.
+                -->
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         CIIS OS — PUNTO ÚNICO DE ENTRADA JAVASCRIPT
+         =====================================================
+
+         IMPORTANTE:
+
+         app.js es el único módulo que se carga directamente
+         desde index.html.
+
+         Los demás módulos serán gestionados mediante
+         import/export utilizando ES Modules nativos.
+
+         NO agregar otros <script> aquí.
+         ===================================================== -->
+
+    <script
+        type="module"
+        src="./js/app.js"
+    ></script>
+
+</body>
+</html>
